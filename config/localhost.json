@@ -1,0 +1,5 @@
+{
+    "dbUrl":"mongodb+srv://kevishshaligram:tLkaWLbgmMqoFdHa@cms.ifn0fsn.mongodb.net/localDB?retryWrites=true&w=majority&appName=CMS",
+    "port":3000,
+    "SECRET_KEY":"BoloZubaanKesari"
+}
