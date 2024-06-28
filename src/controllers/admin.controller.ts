@@ -10,6 +10,7 @@ import { IContent } from "../interfaces/IContent";
 import multer from "multer";
 import path from 'path'
 import { isValidObjectId } from "mongoose";
+import { AdminService } from "../services/admin.service";
 const storageConfig = multer.diskStorage({
     destination: path.join(__dirname, "../public/uploads"),
     filename: (req, file, res) => {
@@ -37,7 +38,8 @@ const upload = multer(
 export class AdminController{
     constructor(
         @inject<UserService>(TYPES.UserService) private userService:UserService,
-        @inject<ContentService>(TYPES.ContentService) private contentService: ContentService
+        @inject<ContentService>(TYPES.ContentService) private contentService: ContentService,
+        @inject<AdminService>(TYPES.AdminService) private adminService: AdminService,
     ){}
     @httpGet('/getAllUser')
     async getAllUsers(@request() req:Request,@response() res:Response):Promise<void>{
@@ -132,6 +134,29 @@ export class AdminController{
             }
             await this.contentService.updateContentOfUser(contentId,{title,description,contentPath},_id)
             res.json({status:true,message:responseMessage.CONTENTUPDATED})
+        } catch (error) {
+            const message: string = errorHandler(error)
+            res.json({ status: false, message })
+        }
+    }
+
+    @httpGet('/getTotalCounts')
+    async getTotalCounts(@request() req: Request, @response() res: Response): Promise<void>{
+        try {
+            const data = await this.adminService.getTotalCounts()
+            res.json({status:true,counts:data})
+        } catch (error) {
+            const message: string = errorHandler(error)
+            res.json({ status: false, message })
+        }
+    }
+
+    @httpGet('/getYearWiseContentCounts')
+    async getYearAndMonthWiseContentCounts(@request() req: Request, @response() res: Response):Promise<void>{
+        try {
+            const {year} = req.query 
+            const data = await this.adminService.getYearWiseContentCounts(year?.toString() ?? "2024")
+            res.json({status:true,counts:data})
         } catch (error) {
             const message: string = errorHandler(error)
             res.json({ status: false, message })

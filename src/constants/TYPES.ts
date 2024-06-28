@@ -4,4 +4,5 @@ export const TYPES = {
     AdminMiddleware:Symbol.for('AdminMiddleware'),
     UserService:Symbol.for('UserService'),
     ContentService:Symbol.for('ContentService'),
+    AdminService:Symbol.for('AdminService'),
 }
